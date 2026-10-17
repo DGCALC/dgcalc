@@ -21,4 +21,3 @@ Go to [the DGCALC group](https://github.com/DGCALC/DGCALC), a family of example 
 ### Last Updated
 
 Lucius Schoenbaum October 15, 2026
-
