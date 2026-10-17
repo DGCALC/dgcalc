@@ -3,4 +3,8 @@
 **/notes/
 **/share/
 **/dist/
-**/.DS_Store
+**/__pycache__/
+*.DS_Store
+*.o
+*.exe
+*.swp
