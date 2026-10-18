@@ -7,36 +7,37 @@ from ..subtool import Subtool
 from ..post_sys import create_dir, create_stem, ttyRead
 
 import os
-import shutil
+import argparse
+import subprocess
 
 
 class get(Subtool):
     """
-    Print the current working directory for the `dgcalc` tool.
+    Pull dgcalc groups onto the local system.
 
-    dgcalc get
-
+    dgcalc get <group_list>
 
     """
     def add_arguments(self, parser):
         parser.add_argument(
-            "type",
-            metavar="type",
+            "group_list",
+            metavar="group",
+            nargs=argparse.REMAINDER,
             type=str,
-            help="Type of object to create",
+            help="Groups to get",
         )
-        parser.add_argument(
-            "name",
-            metavar="name",
-            type=str,
-            help="Name of object to create",
-        )
+        # todo this should update DGCALC_HOME, this will be done soon.
 
     def __init__(self, args, head):
         super().__init__(args, head)
-        self.msg(self.pargs)
-        self.msg(head.cw.w)
-        self.msg(head.cw.p)
+        # self.msg(self.pargs)
+        # self.msg(head.cw.w)
+        # self.msg(head.cw.p)
+        for group in self.pargs.group_list:
+            self.msg(group)
+            self.vmsg(f"git clone https://github.com/{group}/.github.git")
+            subprocess.run(["git", "clone", "--recurse-submodules", f"https://github.com/{group}/.github.git", group])
+
 
 
 

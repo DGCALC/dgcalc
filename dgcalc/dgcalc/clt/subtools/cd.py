@@ -10,6 +10,7 @@ import os
 
 class cd(Subtool):
     """
+    Move around the dgcalc tree.
 
     """
 
@@ -26,4 +27,5 @@ class cd(Subtool):
         self.msg(self.pargs)
         self.msg(head.cw.w)
         self.msg(head.cw.p)
+
 

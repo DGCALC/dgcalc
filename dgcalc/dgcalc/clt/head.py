@@ -73,13 +73,18 @@ class Head(Messenger):
                 self.msg(f"After this error, a critical error occurred: {e}")
                 exit(0)
         if len(args) <= 1:
+            # print help message if called with no arguments
             args.append('-h')
-        x = args[1]
-        if x[0] == '-':
-            _ = Subtool(args=args[1:], head=self)
-        else:
-            if x not in subtools:
-                self.msg(f"Unrecognized subtool {x}.")
+        modifiers = []
+        found = False
+        for i in range(1,len(args)):
+            arg = args[i]
+            if arg not in subtools:
+                modifiers.append(arg)
             else:
-                subtools[x](args=args[2:], head=self)
+                subtools[arg](args=modifiers+args[i+1:], head=self)
+                found = True
+        if not found:
+            _ = Subtool(args=args[1:], head=self)
+
 

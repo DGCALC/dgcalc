@@ -4,6 +4,8 @@
 from .messenger import Messenger
 import argparse
 
+
+
 from .state import descriptions
 
 
@@ -15,6 +17,7 @@ class Subtool(Messenger):
     def add_arguments(self, parser):
         """
         Define to add arguments to the argument parser.
+        This method is overridden by individual subtools.
         """
         pass
 
@@ -43,6 +46,7 @@ class Subtool(Messenger):
         self.pargs = parser.parse_args(args)
         if self.vlevel() > 0:
             head.msg(f"Verbosity level {self.vlevel()}")
+            self.verbose = True
 
 
     # GENERIC SUBTOOL API:
