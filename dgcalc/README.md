@@ -234,16 +234,10 @@ set(ACCEL "") # "Cuda", "Metal", "" (none)
 set(ACCEL_DEPENDENCIES "") # cuBLAS, cuRAND, ...
 set(ACCEL_INSTALL_DIR "/usr/local") # /usr/local, $ENV{CUDA_HOME}, $ENV{METAL_HOME}, ...
 set(DEPENDENCY_LIB_TYPE "s") # shared (s) or static (a)
+set(GROUPS "DGCALC")
 set(DGCALC_DEPENDENCY_TEST "")
 set(DGCALC_DEPENDENCY_SRC ${DGCALC_DEPENDENCY_TEST} "")
 set(DGCALC_DEPENDENCY_LIB "")
-
-execute_process(COMMAND dgcalc source 1 OUTPUT_VARIABLE SOURCE1_CODE)
-cmake_language(EVAL CODE "${SOURCE1_CODE}")
-set(PROJECT_NAME "${PROJECT_FAMILY_NAME}${PROJECT_VERSION}${PROJECT_VERSION_NAME}_${PROJECT_VERSION_MONTH}${PROJECT_VERSION_YEAR}")
-project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES ${PROJECT_LANGUAGES})
-execute_process(COMMAND dgcalc source 2 OUTPUT_VARIABLE SOURCE2_CODE)
-cmake_language(EVAL CODE "${SOURCE2_CODE}")
 ```
 
 This is not intended to look like something perfect, but instead like something you can edit.
@@ -267,8 +261,8 @@ your test bench (the file `main.c`).
 
 ### Typical User-facing CMake file
 
-A typical user-facing CMake file may look like the following example, used in the recent `CSRiemann` project,
-part of the `GEOMESH` group that the author has recently created.
+A typical user-facing CMake file may look like the following example, 
+used in the [SPRiemann](https://github.com/SPGEOMESH/SPRiemann) project, part of the [SPGEOMESH](https://github.com/SPGEOMESH) group. 
 ```cmake
 cmake_minimum_required(VERSION 3.24)
 set(PROJECT_LANGUAGES "CXX" "Fortran")
@@ -300,29 +294,23 @@ set(NUM_PROCESSES 6)
 #set(PROGRAM_ARGS "")
 #set(OUTPUT_STDOUT_FILE)
 #set(OUTPUT_STDOUT_TERMINAL)
-
-execute_process(COMMAND dgcalc source 1 OUTPUT_VARIABLE SOURCE1_CODE)
-cmake_language(EVAL CODE "${SOURCE1_CODE}")
-set(PROJECT_NAME "${PROJECT_FAMILY_NAME}${PROJECT_VERSION}${PROJECT_VERSION_NAME}_${PROJECT_VERSION_MONTH}${PROJECT_VERSION_YEAR}")
-project(${PROJECT_NAME} VERSION ${PROJECT_VERSION} LANGUAGES ${PROJECT_LANGUAGES})
-execute_process(COMMAND dgcalc source 2 OUTPUT_VARIABLE SOURCE2_CODE)
-cmake_language(EVAL CODE "${SOURCE2_CODE}")
 ```
 This user-facing CMake file does the following (we go through it line by line):
 - Defines the minimum version of CMake (3.24)
 - sets the project languages (C++ and Fortran)
 - sets the language standards used (20 and 90)
-- defines the project name, `CSRiemann`, the project version, `0.4.0`, and some other naming artifacts,
+- defines the project name, `SPRiemann`, the project version, `0.4.0`, and some other naming artifacts,
 - Defines a couple of *working rdirs*, called `_T` and `_I`, which will be visible in `main`, but only when working in the project, not in daughter projects. Typically, this functionality is for your testing code and testing support.
   In our experience, *you will always need tests*, there is no other reality.
 - Sets some parameters for accelerators (hardware features)
-- Defines dependencies exposed locally by the MDS: the group `DGCALC` (this group), and the group `GEOMESH` (case sensitive).
+- Defines dependencies exposed locally by the MDS: the group `DGCALC` (this group), and the group `SPGEOMESH` (case sensitive).
 - Sets a variable `NUM_PROCESSES`. When this variable is set, the project will be compiled as MPI parallel, otherwise, it will be compiled as a serial program. The value of `NUM_PROCESSES` is the number of MPI tasks (the number of parallel processes to run).
 - Commented out are several options for run behavior: program arguments (can be passed in the string),
   and where to route output (to standard out, to a file). The default behavior sends output to standard out and standard error pipes. If you set both `OUTPUT_STDOUT_FILE` and `OUTPUT_STDOUT_TERMINAL`, then both routes are used.
 
-The remainder of the lines in the file is boilerplate that defines the project and links the project to the MDS scripting.
-
+In the real file this extract is based on, there follow lines in the file is boilerplate that defines the project and links the project to the MDS scripting. 
+This section of the code does not need to be modified, but it remains true that the 
+entire file is valid CMake language, which can be edited by the user wishing to customize his or her build. 
 
 ### Build Targets
 
